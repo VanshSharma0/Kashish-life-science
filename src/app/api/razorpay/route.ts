@@ -11,7 +11,7 @@ const razorpay = new Razorpay({
 export async function POST(req: NextRequest) {
   try {
     await dbConnect();
-    const { items, totalAmount } = await req.json();
+    const { items, totalAmount, userId, customerName, email, phone } = await req.json();
 
     if (!items || items.length === 0) {
       return NextResponse.json({ error: 'Cart is empty' }, { status: 400 });
@@ -26,10 +26,14 @@ export async function POST(req: NextRequest) {
     const razorpayOrder = await razorpay.orders.create(options);
 
     const newOrder = await Order.create({
+      userId,
+      customerName,
+      email,
+      phone,
       items,
       totalAmount,
       razorpayOrderId: razorpayOrder.id,
-      status: 'PENDING'
+      status: 'pending'
     });
 
     return NextResponse.json({ order: razorpayOrder, dbOrderId: newOrder._id }, { status: 200 });

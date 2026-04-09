@@ -4,14 +4,16 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
-import { ShoppingBag, Menu, X, Leaf } from 'lucide-react';
+import { ShoppingBag, Menu, X, User as UserIcon } from 'lucide-react';
 import { useCartStore } from '@/store/cartStore';
+import { useAuth } from '@/context/AuthContext';
 
 export const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const pathname = usePathname();
   const { openCart, items } = useCartStore();
+  const { user } = useAuth();
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -62,7 +64,16 @@ export const Navbar = () => {
             ))}
           </nav>
 
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2 sm:gap-4">
+            {user ? (
+              <Link href="/profile" className="p-2 text-gray-600 hover:text-green-600 transition-colors" aria-label="Profile">
+                <UserIcon size={24} />
+              </Link>
+            ) : (
+              <Link href="/login" className="hidden sm:block text-sm font-semibold text-green-600 border border-green-600 px-4 py-2 rounded-full hover:bg-green-50 transition-colors bg-white">
+                Sign In
+              </Link>
+            )}
             <button 
               onClick={openCart}
               className="relative p-2 text-gray-600 hover:text-green-600 transition-colors cursor-pointer"

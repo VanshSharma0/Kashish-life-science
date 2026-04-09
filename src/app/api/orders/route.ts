@@ -2,10 +2,12 @@ import { NextRequest, NextResponse } from 'next/server';
 import dbConnect from '@/lib/mongoose';
 import { Order } from '@/models/Order';
 
-export async function GET() {
+export async function GET(req: NextRequest) {
   try {
     await dbConnect();
-    const orders = await Order.find({}).sort({ createdAt: -1 });
+    const userId = req.nextUrl.searchParams.get('userId');
+    const query = userId ? { userId } : {};
+    const orders = await Order.find(query).sort({ createdAt: -1 });
     return NextResponse.json(orders);
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 });

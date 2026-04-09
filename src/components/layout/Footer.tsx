@@ -48,11 +48,11 @@ export const Footer = () => {
               </li>
               <li className="flex items-center gap-3">
                 <Phone size={18} className="text-green-500 shrink-0" />
-                <span>+91 XXXXXXXXXX</span>
+                <span>+91 9837730011</span>
               </li>
               <li className="flex items-center gap-3">
                 <Mail size={18} className="text-green-500 shrink-0" />
-                <span>info@kashishlife.com</span>
+                <a href="mailto:kashishlifescience@gmail.com" className="hover:text-green-300 transition-colors">kashishlifescience@gmail.com</a>
               </li>
             </ul>
           </div>

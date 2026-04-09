@@ -1,6 +1,7 @@
 import mongoose, { Schema, Document, Model } from 'mongoose';
 
 export interface IOrder extends Document {
+  userId?: string;
   customerName: string;
   email: string;
   phone: string;
@@ -19,6 +20,7 @@ export interface IOrder extends Document {
 }
 
 const OrderSchema: Schema = new Schema({
+  userId: { type: String },
   customerName: { type: String, required: true },
   email: { type: String, required: true },
   phone: { type: String, required: true },

@@ -5,10 +5,15 @@ import { useCartStore } from '@/store/cartStore';
 import { X, Minus, Plus, ShoppingBag } from 'lucide-react';
 import { Button } from '../ui/Button';
 import Image from 'next/image';
+import { useAuth } from '@/context/AuthContext';
+import { useRouter } from 'next/navigation';
 
 export const CartDrawer = () => {
-  const { items, isCartOpen, closeCart, updateQuantity, removeItem } = useCartStore();
+  const { items, isCartOpen, closeCart, updateQuantity, removeItem, clearCart } = useCartStore();
   const [mounted, setMounted] = useState(false);
+  const [isCheckingOut, setIsCheckingOut] = useState(false);
+  const { user } = useAuth();
+  const router = useRouter();
 
   useEffect(() => {
     setMounted(true);
@@ -17,6 +22,89 @@ export const CartDrawer = () => {
   if (!mounted) return null;
 
   const totalAmount = items.reduce((acc, item) => acc + item.price * item.quantity, 0);
+
+  const loadRazorpay = () => {
+    return new Promise((resolve) => {
+      if (document.querySelector('script[src="https://checkout.razorpay.com/v1/checkout.js"]')) {
+        resolve(true); return;
+      }
+      const script = document.createElement('script');
+      script.src = 'https://checkout.razorpay.com/v1/checkout.js';
+      script.onload = () => resolve(true);
+      script.onerror = () => resolve(false);
+      document.body.appendChild(script);
+    });
+  };
+
+  const handleCheckout = async () => {
+    if (!user) return;
+    setIsCheckingOut(true);
+    try {
+      const res = await loadRazorpay();
+      if (!res) throw new Error("Razorpay SDK failed to load. Are you online?");
+
+      const orderData = await fetch('/api/razorpay', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          items,
+          totalAmount,
+          userId: user.uid,
+          email: user.email,
+          customerName: user.displayName || user.email?.split('@')[0] || "Customer",
+          phone: "9999999999" // Fallback since UI doesn't collect phone yet
+        }),
+      }).then(r => r.json());
+
+      if (orderData.error) throw new Error(orderData.error);
+
+      const options = {
+        key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID || 'rzp_test_dummykey123',
+        amount: orderData.order.amount,
+        currency: orderData.order.currency,
+        name: "Kashish Life Science",
+        description: "Veterinary Products Checkout",
+        order_id: orderData.order.id,
+        handler: async function (response: any) {
+          const verifyData = await fetch('/api/verify', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              razorpay_order_id: response.razorpay_order_id,
+              razorpay_payment_id: response.razorpay_payment_id,
+              razorpay_signature: response.razorpay_signature
+            })
+          }).then(r => r.json());
+          
+          if (verifyData.error) {
+            alert("Verification Failed!");
+          } else {
+            clearCart();
+            closeCart();
+            router.push('/profile/orders');
+          }
+        },
+        prefill: {
+          name: user.displayName || user.email?.split('@')[0],
+          email: user.email,
+          contact: "9999999999"
+        },
+        theme: {
+          color: "#10b981"
+        }
+      };
+
+      const rzp = new (window as any).Razorpay(options);
+      rzp.on('payment.failed', function (response: any) {
+        alert("Payment sequence cancelled or failed.");
+      });
+      rzp.open();
+    } catch (err: any) {
+      console.error(err);
+      alert("Checkout failed: " + err.message);
+    }
+    setIsCheckingOut(false);
+  };
 
   return (
     <>
@@ -92,9 +180,25 @@ export const CartDrawer = () => {
               <span className="text-gray-600">Total</span>
               <span className="text-green-700">₹{totalAmount}</span>
             </div>
-            <Button className="w-full h-12 text-lg">
-              Checkout Options (Coming soon)
-            </Button>
+            {user ? (
+              <Button 
+                className="w-full h-12 text-lg disabled:opacity-50" 
+                onClick={handleCheckout} 
+                disabled={isCheckingOut}
+              >
+                {isCheckingOut ? "Processing..." : `Checkout • ₹${totalAmount}`}
+              </Button>
+            ) : (
+              <div className="space-y-3">
+                <p className="text-center text-sm text-yellow-600 bg-yellow-50 p-2 rounded-lg">You must sign in to secure your order.</p>
+                <Button className="w-full h-12 text-lg" onClick={() => {
+                  closeCart();
+                  router.push('/login?next=/products');
+                }}>
+                  Sign In to Checkout
+                </Button>
+              </div>
+            )}
           </div>
         )}
       </div>

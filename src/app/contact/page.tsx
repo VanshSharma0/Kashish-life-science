@@ -26,14 +26,14 @@ export default function ContactPage() {
             <Phone size={24} />
           </div>
           <h3 className="text-lg font-bold text-gray-900 mb-2">Phone Number</h3>
-          <p className="text-gray-600">+91 XXXXXXXXXX<br/>Mon-Sat 9am to 6pm</p>
+          <p className="text-gray-600">+91 9837730011<br/>Mon-Sat 9am to 6pm</p>
         </div>
         <div className="flex flex-col items-center p-8 bg-green-50 rounded-2xl text-center border border-green-100">
           <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center text-green-600 mb-6 shadow-sm">
             <Mail size={24} />
           </div>
           <h3 className="text-lg font-bold text-gray-900 mb-2">Email Address</h3>
-          <p className="text-gray-600">info@kashishlife.com<br/>support@kashishlife.com</p>
+          <p className="text-gray-600">kashishlifescience@gmail.com<br/><br/></p>
         </div>
       </div>
 
