@@ -4,10 +4,17 @@ import { ProductGrid } from "@/components/product/ProductGrid";
 import { Button } from "@/components/ui/Button";
 import prisma from "@/lib/prisma";
 
+// Force dynamic rendering — this page queries MongoDB and cannot be
+// statically prerendered at build time (DB is not available in Docker build env).
+export const dynamic = "force-dynamic";
+
 export default async function Home() {
-  const featuredProducts = await prisma.product.findMany({
-    take: 4,
-  });
+  let featuredProducts: Awaited<ReturnType<typeof prisma.product.findMany>> = [];
+  try {
+    featuredProducts = await prisma.product.findMany({ take: 4 });
+  } catch (err) {
+    console.error("[Home] Failed to fetch featured products:", err);
+  }
 
   return (
     <div className="flex flex-col gap-20 pb-20">
