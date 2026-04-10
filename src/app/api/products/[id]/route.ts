@@ -1,15 +1,21 @@
 import { NextRequest, NextResponse } from 'next/server';
-import dbConnect from '@/lib/mongoose';
-import { Product } from '@/models/Product';
+import prisma from '@/lib/prisma';
 
 export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
-    await dbConnect();
     const { id } = await params;
     const data = await req.json();
-    const product = await Product.findByIdAndUpdate(id, data, { new: true });
-    if (!product) return NextResponse.json({ error: 'Not found' }, { status: 404 });
-    return NextResponse.json(product);
+    
+    // Check existence or catch exception for not found
+    try {
+      const product = await prisma.product.update({
+        where: { id },
+        data
+      });
+      return NextResponse.json(product);
+    } catch (e) {
+      return NextResponse.json({ error: 'Not found' }, { status: 404 });
+    }
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
@@ -17,11 +23,15 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: 
 
 export async function DELETE(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
-    await dbConnect();
     const { id } = await params;
-    const product = await Product.findByIdAndDelete(id);
-    if (!product) return NextResponse.json({ error: 'Not found' }, { status: 404 });
-    return NextResponse.json({ success: true });
+    try {
+      await prisma.product.delete({
+        where: { id }
+      });
+      return NextResponse.json({ success: true });
+    } catch (e) {
+      return NextResponse.json({ error: 'Not found' }, { status: 404 });
+    }
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }

@@ -2,19 +2,12 @@ import Image from "next/image";
 import Link from "next/link";
 import { ProductGrid } from "@/components/product/ProductGrid";
 import { Button } from "@/components/ui/Button";
-import dbConnect from "@/lib/mongoose";
-import { Product as ProductModel } from "@/models/Product";
+import prisma from "@/lib/prisma";
 
 export default async function Home() {
-  await dbConnect();
-  const dbProducts = await ProductModel.find({}).limit(4).lean();
-  
-  // Serialize Mongoose docs to match our frontend ProductType expecting 'id'
-  const featuredProducts = dbProducts.map((p: any) => ({
-    ...p,
-    id: p._id.toString(),
-    _id: p._id.toString(),
-  }));
+  const featuredProducts = await prisma.product.findMany({
+    take: 4,
+  });
 
   return (
     <div className="flex flex-col gap-20 pb-20">

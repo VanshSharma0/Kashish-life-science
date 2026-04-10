@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import Razorpay from 'razorpay';
-import dbConnect from '@/lib/mongoose';
-import { Order } from '@/models/Order';
+import prisma from '@/lib/prisma';
 
 const razorpay = new Razorpay({
   key_id: process.env.RAZORPAY_KEY_ID || 'dummy_key',
@@ -10,7 +9,6 @@ const razorpay = new Razorpay({
 
 export async function POST(req: NextRequest) {
   try {
-    await dbConnect();
     const { items, totalAmount, userId, customerName, email, phone } = await req.json();
 
     if (!items || items.length === 0) {
@@ -25,18 +23,20 @@ export async function POST(req: NextRequest) {
     
     const razorpayOrder = await razorpay.orders.create(options);
 
-    const newOrder = await Order.create({
-      userId,
-      customerName,
-      email,
-      phone,
-      items,
-      totalAmount,
-      razorpayOrderId: razorpayOrder.id,
-      status: 'pending'
+    const newOrder = await prisma.order.create({
+      data: {
+        userId,
+        customerName,
+        email,
+        phone,
+        items,
+        totalAmount,
+        razorpayOrderId: razorpayOrder.id,
+        status: 'pending'
+      }
     });
 
-    return NextResponse.json({ order: razorpayOrder, dbOrderId: newOrder._id }, { status: 200 });
+    return NextResponse.json({ order: razorpayOrder, dbOrderId: newOrder.id }, { status: 200 });
 
   } catch (error: any) {
     console.error('Error creating Razorpay order:', error);

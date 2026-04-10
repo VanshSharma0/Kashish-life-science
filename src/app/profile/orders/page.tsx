@@ -54,8 +54,8 @@ export default function ProfileOrdersPage() {
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
               {orders.map(order => (
-                <tr key={order._id}>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-mono text-gray-500">{order._id.substring(0,8)}...</td>
+                <tr key={order.id}>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-mono text-gray-500">{order.id.substring(0,8)}...</td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                     {new Date(order.createdAt).toLocaleDateString()}
                   </td>

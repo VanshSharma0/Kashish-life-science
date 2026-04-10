@@ -19,9 +19,9 @@ export default function ProductDetails(props: { params: Promise<{ id: string }> 
     fetch('/api/products')
       .then(res => res.json())
       .then(data => {
-        const found = data.find((p: any) => p._id === params.id);
+        const found = data.find((p: any) => p.id === params.id);
         if (found) {
-          setProduct({ ...found, id: found._id });
+          setProduct(found);
         }
         setLoading(false);
       })
@@ -59,9 +59,16 @@ export default function ProductDetails(props: { params: Promise<{ id: string }> 
 
         {/* Details */}
         <div className="flex flex-col">
-          <span className="inline-block px-3 py-1 bg-green-50 text-green-700 rounded-full text-xs font-bold tracking-widest uppercase mb-4 w-max">
-            {product.type}
-          </span>
+          <div className="flex gap-3 mb-4">
+            <span className="inline-block px-3 py-1 bg-green-50 text-green-700 rounded-full text-xs font-bold tracking-widest uppercase w-max">
+              {product.type}
+            </span>
+            {product.quantity && (
+              <span className="inline-block px-3 py-1 bg-blue-50 text-blue-700 rounded-full text-xs font-bold tracking-widest uppercase w-max">
+                {product.quantity}
+              </span>
+            )}
+          </div>
           <h1 className="text-4xl font-extrabold text-gray-900 tracking-tight mb-4">{product.name}</h1>
           <p className="text-3xl font-bold text-green-600 mb-6">₹{product.price}</p>
           
@@ -73,7 +80,7 @@ export default function ProductDetails(props: { params: Promise<{ id: string }> 
             <div className="mb-10">
               <h3 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
                 <ShieldCheck className="text-green-500" />
-                Key Benefits
+                Key Benefits & Indications
               </h3>
               <ul className="space-y-3">
                 {product.benefits.map((benefit, idx) => (
@@ -83,6 +90,22 @@ export default function ProductDetails(props: { params: Promise<{ id: string }> 
                   </li>
                 ))}
               </ul>
+            </div>
+          )}
+
+          {product.dosage && (
+            <div className="mb-10 p-5 bg-green-50 rounded-2xl border border-green-100">
+              <h3 className="text-sm font-bold text-green-900 mb-2 uppercase tracking-wide">Recommended Dosage</h3>
+              <p className="text-green-800 font-medium whitespace-pre-wrap">{product.dosage}</p>
+            </div>
+          )}
+
+          {product.composition && (
+            <div className="mb-10">
+              <h3 className="text-lg font-bold text-gray-900 mb-3 border-b border-gray-100 pb-2">Full Composition</h3>
+              <p className="text-gray-600 text-sm whitespace-pre-wrap leading-relaxed bg-gray-50 p-4 rounded-xl border border-gray-100">
+                {product.composition}
+              </p>
             </div>
           )}
 

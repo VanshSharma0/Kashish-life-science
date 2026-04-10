@@ -13,9 +13,7 @@ export default function ProductsPage() {
     fetch('/api/products')
       .then(res => res.json())
       .then(data => {
-        // Map _id to id so components don't break
-        const formatted = data.map((p: any) => ({ ...p, id: p._id }));
-        setProducts(formatted);
+        setProducts(data);
         setLoading(false);
       })
       .catch(err => {

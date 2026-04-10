@@ -15,7 +15,8 @@ export default function AdminProducts() {
   const [editingId, setEditingId] = useState<string | null>(null);
   
   const [formData, setFormData] = useState({
-    name: '', description: '', price: 0, type: 'Powder', imageUrl: ''
+    name: '', description: '', price: 0, type: 'Powder', imageUrl: '',
+    quantity: '', dosage: '', composition: '', benefits: ''
   });
 
   const fetchProducts = async () => {
@@ -23,7 +24,7 @@ export default function AdminProducts() {
     try {
       const res = await fetch('/api/products');
       const data = await res.json();
-      setProducts(data.map((p:any) => ({...p, id: p._id})));
+      setProducts(data);
     } catch(err) {
       console.error(err);
     }
@@ -39,11 +40,13 @@ export default function AdminProducts() {
       setEditingId(product.id);
       setFormData({
         name: product.name, description: product.description,
-        price: product.price, type: product.type, imageUrl: product.imageUrl
+        price: product.price, type: product.type, imageUrl: product.imageUrl,
+        quantity: product.quantity || '', dosage: product.dosage || '',
+        composition: product.composition || '', benefits: product.benefits?.join('\n') || ''
       });
     } else {
       setEditingId(null);
-      setFormData({ name: '', description: '', price: 0, type: 'Powder', imageUrl: '' });
+      setFormData({ name: '', description: '', price: 0, type: 'Powder', imageUrl: '', quantity: '', dosage: '', composition: '', benefits: '' });
     }
     setIsModalOpen(true);
   };
@@ -53,11 +56,15 @@ export default function AdminProducts() {
     if(uploading) return;
     const url = editingId ? `/api/products/${editingId}` : '/api/products';
     const method = editingId ? 'PUT' : 'POST';
+    const payload = {
+      ...formData,
+      benefits: formData.benefits.split('\n').map(s => s.trim()).filter(Boolean)
+    };
     
     await fetch(url, {
       method,
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(formData)
+      body: JSON.stringify(payload)
     });
     
     setIsModalOpen(false);
@@ -146,35 +153,53 @@ export default function AdminProducts() {
       )}
 
       {isModalOpen && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-[200]">
-          <div className="bg-white rounded-xl p-6 w-full max-w-lg shadow-xl">
-            <h2 className="text-2xl font-bold mb-6">{editingId ? 'Edit Product' : 'New Product'}</h2>
-            <form onSubmit={handleSubmit} className="space-y-4">
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-[200] p-4">
+          <div className="bg-white rounded-xl p-5 w-full max-w-xl shadow-xl max-h-[90vh] overflow-y-auto">
+            <h2 className="text-xl font-bold mb-4">{editingId ? 'Edit Product' : 'New Product'}</h2>
+            <form onSubmit={handleSubmit} className="space-y-3">
               <div>
-                <label className="block text-sm font-medium text-gray-700">Name</label>
-                <input required value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} className="mt-1 w-full border border-gray-300 rounded-md p-2 outline-none focus:border-green-500" />
+                <label className="block text-xs font-medium text-gray-700">Name</label>
+                <input required value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} className="mt-1 w-full border border-gray-300 rounded-md p-1.5 outline-none focus:border-green-500 text-sm" />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700">Description</label>
-                <textarea required value={formData.description} onChange={e => setFormData({...formData, description: e.target.value})} className="mt-1 w-full border border-gray-300 rounded-md p-2 outline-none focus:border-green-500" rows={3} />
+                <label className="block text-xs font-medium text-gray-700">Description</label>
+                <textarea required value={formData.description} onChange={e => setFormData({...formData, description: e.target.value})} className="mt-1 w-full border border-gray-300 rounded-md p-1.5 outline-none focus:border-green-500 text-sm" rows={2} />
               </div>
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700">Price (₹)</label>
-                  <input type="number" required value={formData.price} onChange={e => setFormData({...formData, price: Number(e.target.value)})} className="mt-1 w-full border border-gray-300 rounded-md p-2 outline-none focus:border-green-500" />
+                  <label className="block text-xs font-medium text-gray-700">Price (₹)</label>
+                  <input type="number" required value={formData.price} onChange={e => setFormData({...formData, price: Number(e.target.value)})} className="mt-1 w-full border border-gray-300 rounded-md p-1.5 outline-none focus:border-green-500 text-sm" />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700">Type</label>
-                  <select value={formData.type} onChange={e => setFormData({...formData, type: e.target.value as 'Powder'|'Liquid'})} className="mt-1 w-full border border-gray-300 rounded-md p-2 outline-none focus:border-green-500">
+                  <label className="block text-xs font-medium text-gray-700">Type</label>
+                  <select value={formData.type} onChange={e => setFormData({...formData, type: e.target.value as 'Powder'|'Liquid'})} className="mt-1 w-full border border-gray-300 rounded-md p-1.5 outline-none focus:border-green-500 text-sm">
                     <option>Powder</option>
                     <option>Liquid</option>
                   </select>
                 </div>
               </div>
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-xs font-medium text-gray-700">Quantity / Presentation</label>
+                  <input value={formData.quantity} onChange={e => setFormData({...formData, quantity: e.target.value})} className="mt-1 w-full border border-gray-300 rounded-md p-1.5 outline-none focus:border-green-500 text-sm" placeholder="e.g. 1 Ltr" />
+                </div>
+                <div>
+                  <label className="block text-xs font-medium text-gray-700">Dosage</label>
+                  <input value={formData.dosage} onChange={e => setFormData({...formData, dosage: e.target.value})} className="mt-1 w-full border border-gray-300 rounded-md p-1.5 outline-none focus:border-green-500 text-sm" placeholder="e.g. 100 ml daily" />
+                </div>
+              </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Image Asset</label>
+                <label className="block text-xs font-medium text-gray-700">Composition</label>
+                <textarea value={formData.composition} onChange={e => setFormData({...formData, composition: e.target.value})} className="mt-1 w-full border border-gray-300 rounded-md p-1.5 outline-none focus:border-green-500 text-sm" rows={2} placeholder="List ingredients..." />
+              </div>
+              <div>
+                <label className="block text-xs font-medium text-gray-700">Uses / Indications / Benefits (One per line)</label>
+                <textarea value={formData.benefits} onChange={e => setFormData({...formData, benefits: e.target.value})} className="mt-1 w-full border border-gray-300 rounded-md p-1.5 outline-none focus:border-green-500 text-sm" rows={2} placeholder="Helps prevent mastitis&#10;Improves feed digestion" />
+              </div>
+              <div>
+                <label className="block text-xs font-medium text-gray-700 mb-1">Image Asset</label>
                 <div className="flex gap-2 items-center">
-                  <input required value={formData.imageUrl} onChange={e => setFormData({...formData, imageUrl: e.target.value})} className="flex-1 border border-gray-300 rounded-md p-2 outline-none focus:border-green-500 text-sm" placeholder="URL or tap upload ->" />
+                  <input required value={formData.imageUrl} onChange={e => setFormData({...formData, imageUrl: e.target.value})} className="flex-1 border border-gray-300 rounded-md p-1.5 outline-none focus:border-green-500 text-sm" placeholder="URL or tap upload ->" />
                   
                   <div className="relative flex shrink-0 items-center justify-center bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded-md p-2 cursor-pointer transition-colors w-10 overflow-hidden">
                     <input type="file" onChange={handleImageUpload} accept="image/*" className="absolute inset-0 opacity-0 cursor-pointer w-full h-full" disabled={uploading} />
@@ -188,9 +213,9 @@ export default function AdminProducts() {
                 {uploading && <p className="text-xs text-green-600 mt-1">Uploading to secure Firebase storage...</p>}
               </div>
 
-              <div className="flex justify-end gap-3 mt-8 pt-4 border-t border-gray-100">
-                <Button type="button" variant="outline" onClick={() => setIsModalOpen(false)}>Cancel</Button>
-                <Button type="submit" disabled={uploading}>
+              <div className="flex justify-end gap-3 mt-4 pt-3 border-t border-gray-100">
+                <Button type="button" variant="outline" size="sm" onClick={() => setIsModalOpen(false)}>Cancel</Button>
+                <Button type="submit" size="sm" disabled={uploading}>
                   {uploading ? 'Saving...' : 'Save Product'}
                 </Button>
               </div>

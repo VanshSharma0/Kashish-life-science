@@ -4,9 +4,11 @@ export interface ProductType {
   description: string;
   price: number;
   imageUrl: string;
-  type: 'Powder' | 'Liquid';
+  type: string;
+  quantity?: string | null;
+  dosage?: string | null;
   benefits?: string[];
-  composition?: string;
+  composition?: string | null;
 }
 
 export const products: ProductType[] = [
