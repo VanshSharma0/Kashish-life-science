@@ -4,6 +4,18 @@ import React, { useState, useEffect } from 'react';
 import { ProductType } from '@/lib/data';
 import { Button } from '@/components/ui/Button';
 import { Pencil, Trash2, Plus, UploadCloud } from 'lucide-react';
+import { stripPackSuffixFromName } from '@/lib/productCatalog';
+
+type ProductFormData = {
+  name: string;
+  description: string;
+  price: number;
+  type: string;
+  imageUrl: string;
+  quantity: string;
+  dosage: string;
+  benefits: string;
+};
 
 export default function AdminProducts() {
   const [products, setProducts] = useState<ProductType[]>([]);
@@ -11,11 +23,37 @@ export default function AdminProducts() {
   const [loading, setLoading] = useState(true);
   const [uploading, setUploading] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
+  const [autofillSource, setAutofillSource] = useState<string | null>(null);
   
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<ProductFormData>({
     name: '', description: '', price: 0, type: 'Powder', imageUrl: '',
-    quantity: '', dosage: '', composition: '', benefits: ''
+    quantity: '', dosage: '', benefits: ''
   });
+
+  const getTemplateForName = (name: string): ProductType | null => {
+    const key = stripPackSuffixFromName(name).toLowerCase();
+    if (!key) return null;
+    const match = products.find((p) => {
+      const byName = stripPackSuffixFromName(p.name).toLowerCase() === key;
+      const byCatalog = (p.catalogTitle?.trim().toLowerCase() || '') === key;
+      return byName || byCatalog;
+    });
+    return match ?? null;
+  };
+
+  const applyTemplate = (
+    draft: ProductFormData,
+    template: ProductType
+  ): ProductFormData => {
+    return {
+      ...draft,
+      description: draft.description || template.description || '',
+      dosage: draft.dosage || template.dosage || '',
+      imageUrl: draft.imageUrl || template.imageUrl || '',
+      benefits: draft.benefits || template.benefits?.join('\n') || '',
+      type: draft.type === 'Powder' ? template.type || draft.type : draft.type,
+    };
+  };
 
   const fetchProducts = async () => {
     setLoading(true);
@@ -36,15 +74,17 @@ export default function AdminProducts() {
   const openModal = (product?: ProductType) => {
     if (product) {
       setEditingId(product.id);
+      setAutofillSource(null);
       setFormData({
         name: product.name, description: product.description,
         price: product.price, type: product.type, imageUrl: product.imageUrl,
         quantity: product.quantity || '', dosage: product.dosage || '',
-        composition: product.composition || '', benefits: product.benefits?.join('\n') || ''
+        benefits: product.benefits?.join('\n') || ''
       });
     } else {
       setEditingId(null);
-      setFormData({ name: '', description: '', price: 0, type: 'Powder', imageUrl: '', quantity: '', dosage: '', composition: '', benefits: '' });
+      setAutofillSource(null);
+      setFormData({ name: '', description: '', price: 0, type: 'Powder', imageUrl: '', quantity: '', dosage: '', benefits: '' });
     }
     setIsModalOpen(true);
   };
@@ -162,7 +202,32 @@ export default function AdminProducts() {
             <form onSubmit={handleSubmit} className="space-y-3">
               <div>
                 <label className="block text-xs font-medium text-gray-700">Name</label>
-                <input required value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} className="mt-1 w-full border border-gray-300 rounded-md p-1.5 outline-none focus:border-blue-500 text-sm" />
+                <input
+                  required
+                  value={formData.name}
+                  onChange={e => {
+                    const nextName = e.target.value;
+                    if (editingId) {
+                      setFormData({ ...formData, name: nextName });
+                      return;
+                    }
+                    const template = getTemplateForName(nextName);
+                    let nextData = { ...formData, name: nextName };
+                    if (template) {
+                      nextData = applyTemplate(nextData, template);
+                      setAutofillSource(template.name);
+                    } else {
+                      setAutofillSource(null);
+                    }
+                    setFormData(nextData);
+                  }}
+                  className="mt-1 w-full border border-gray-300 rounded-md p-1.5 outline-none focus:border-blue-500 text-sm"
+                />
+                {autofillSource && !editingId && (
+                  <p className="mt-1 text-xs text-emerald-700">
+                    Auto-filled shared fields from: {autofillSource}
+                  </p>
+                )}
               </div>
               <div>
                 <label className="block text-xs font-medium text-gray-700">Description</label>
@@ -190,10 +255,6 @@ export default function AdminProducts() {
                   <label className="block text-xs font-medium text-gray-700">Dosage</label>
                   <input value={formData.dosage} onChange={e => setFormData({...formData, dosage: e.target.value})} className="mt-1 w-full border border-gray-300 rounded-md p-1.5 outline-none focus:border-blue-500 text-sm" placeholder="e.g. 100 ml daily" />
                 </div>
-              </div>
-              <div>
-                <label className="block text-xs font-medium text-gray-700">Composition (storefront)</label>
-                <textarea value={formData.composition} onChange={e => setFormData({...formData, composition: e.target.value})} className="mt-1 w-full border border-gray-300 rounded-md p-1.5 outline-none focus:border-blue-500 text-sm" rows={2} placeholder="One short customer-facing line (e.g. key actives in plain language). Avoid full mg/IU breakdowns." />
               </div>
               <div>
                 <label className="block text-xs font-medium text-gray-700">Uses / Indications / Benefits (One per line)</label>

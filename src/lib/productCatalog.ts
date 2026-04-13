@@ -13,11 +13,34 @@ export type CatalogGroup = {
 
 export function sortVariants(variants: ProductType[]): ProductType[] {
   return [...variants].sort((a, b) => {
+    const qa = getQuantitySortValue(a.quantity);
+    const qb = getQuantitySortValue(b.quantity);
+    if (qa !== qb) return qa - qb;
+
     const oa = a.variantSort ?? 0;
     const ob = b.variantSort ?? 0;
     if (oa !== ob) return oa - ob;
     return (Number(a.price) || 0) - (Number(b.price) || 0);
   });
+}
+
+function getQuantitySortValue(quantity: string | null | undefined): number {
+  if (!quantity?.trim()) return Number.POSITIVE_INFINITY;
+
+  const text = quantity.trim().toLowerCase();
+  const match = text.match(/(\d+(?:\.\d+)?)/);
+  if (!match) return Number.POSITIVE_INFINITY;
+
+  const value = Number(match[1]);
+  if (!Number.isFinite(value)) return Number.POSITIVE_INFINITY;
+
+  if (/(ltr|litre|liter)\b/.test(text)) return value * 1000;
+  if (/\bl\b/.test(text)) return value * 1000;
+  if (/\bml\b/.test(text)) return value;
+  if (/\bkg\b/.test(text)) return value * 1000;
+  if (/\bgm\b|\bg\b/.test(text)) return value;
+
+  return value;
 }
 
 /** All pack sizes for one catalog line (used on product detail when opening any variant id). */

@@ -8,7 +8,6 @@ import { ArrowLeft, Check, ShieldCheck } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { useCartStore } from "@/store/cartStore";
 import type { ProductType } from "@/lib/data";
-import { getDisplayComposition } from "@/lib/compositionDisplay";
 import {
   buildCartProductLabel,
   formatProductDisplayName,
@@ -160,7 +159,6 @@ export default function ProductDetails(props: {
     variants[0].catalogTitle?.trim() ||
     selected.name;
   const displayTitle = formatProductDisplayName(catalogTitle);
-  const compositionLine = getDisplayComposition(selected.composition);
   const multi = variants.length > 1;
   const qtySummary = formatVariantQuantities(variants);
 
@@ -274,17 +272,6 @@ export default function ProductDetails(props: {
               </h3>
               <p className="text-blue-800 font-medium whitespace-pre-wrap">
                 {selected.dosage}
-              </p>
-            </div>
-          )}
-
-          {compositionLine && (
-            <div className="mb-10">
-              <h3 className="text-lg font-bold text-gray-900 mb-3 border-b border-gray-100 pb-2">
-                Composition
-              </h3>
-              <p className="text-gray-600 leading-relaxed italic">
-                {compositionLine}
               </p>
             </div>
           )}

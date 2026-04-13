@@ -61,7 +61,7 @@ export const ProductCard = ({ group }: { group: CatalogGroup }) => {
           src={defaultVariant.imageUrl}
           alt={title}
           fill
-          className="object-cover transition-transform duration-300 group-hover:scale-105"
+          className="object-contain p-3 transition-transform duration-300 group-hover:scale-105"
         />
       </Link>
       <div className="flex-1 flex flex-col">
