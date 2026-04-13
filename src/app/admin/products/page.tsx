@@ -4,8 +4,6 @@ import React, { useState, useEffect } from 'react';
 import { ProductType } from '@/lib/data';
 import { Button } from '@/components/ui/Button';
 import { Pencil, Trash2, Plus, UploadCloud } from 'lucide-react';
-import { storage } from '@/lib/firebase';
-import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 
 export default function AdminProducts() {
   const [products, setProducts] = useState<ProductType[]>([]);
@@ -78,28 +76,33 @@ export default function AdminProducts() {
     }
   };
 
-  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    setUploading(true);
-    const storageRef = ref(storage, `products/${Date.now()}_${file.name}`);
-    const uploadTask = uploadBytesResumable(storageRef, file);
+    // Validate size (e.g., 10MB)
+    const MAX_SIZE = 10 * 1024 * 1024;
+    if (file.size > MAX_SIZE) {
+      alert("Image is too large! Please select an image smaller than 10MB.");
+      return;
+    }
 
-    uploadTask.on(
-      'state_changed',
-      () => {},
-      (error) => {
-        console.error(error);
-        setUploading(false);
-        alert('Image upload failed');
-      },
-      async () => {
-        const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
-        setFormData({ ...formData, imageUrl: downloadURL });
-        setUploading(false);
-      }
-    );
+    setUploading(true);
+    const reader = new FileReader();
+
+    reader.onload = (event) => {
+      const base64String = event.target?.result as string;
+      setFormData({ ...formData, imageUrl: base64String });
+      setUploading(false);
+    };
+
+    reader.onerror = (error) => {
+      console.error("Image processing error:", error);
+      setUploading(false);
+      alert("Could not process image. Please try another file.");
+    };
+
+    reader.readAsDataURL(file);
   };
 
   return (
@@ -210,7 +213,7 @@ export default function AdminProducts() {
                     )}
                   </div>
                 </div>
-                {uploading && <p className="text-xs text-blue-600 mt-1">Uploading to secure Firebase storage...</p>}
+                {uploading && <p className="text-xs text-blue-600 mt-1">Processing image locally...</p>}
               </div>
 
               <div className="flex justify-end gap-3 mt-4 pt-3 border-t border-gray-100">
