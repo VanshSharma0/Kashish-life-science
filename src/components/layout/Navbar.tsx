@@ -42,10 +42,10 @@ export const Navbar = () => {
         <div className="flex items-center justify-between">
           <Link href="/" className="flex items-center gap-3">
             <div className="relative w-12 h-12 rounded-full overflow-hidden border border-gray-100 shadow-sm">
-              <Image src="/logo.jpeg" alt="Kashish Life Science Logo" fill className="object-cover" />
+              <Image src="/logo.jpeg" alt="Kashish Life Science® Logo" fill className="object-cover" />
             </div>
             <span className="font-bold text-xl md:text-2xl text-gray-900 tracking-tight">
-              Kashish <span className="text-green-600">Life</span>
+              Kashish <span className="text-blue-600">Life Science®</span>
             </span>
           </Link>
 
@@ -55,8 +55,8 @@ export const Navbar = () => {
               <Link 
                 key={link.name} 
                 href={link.href}
-                className={`text-sm font-medium transition-colors hover:text-green-600 ${
-                  pathname === link.href ? 'text-green-600' : 'text-gray-600'
+                className={`text-sm font-medium transition-colors hover:text-blue-600 ${
+                  pathname === link.href ? 'text-blue-600' : 'text-gray-600'
                 }`}
               >
                 {link.name}
@@ -66,22 +66,22 @@ export const Navbar = () => {
 
           <div className="flex items-center gap-2 sm:gap-4">
             {user ? (
-              <Link href="/profile" className="p-2 text-gray-600 hover:text-green-600 transition-colors" aria-label="Profile">
+              <Link href="/profile" className="p-2 text-gray-600 hover:text-blue-600 transition-colors" aria-label="Profile">
                 <UserIcon size={24} />
               </Link>
             ) : (
-              <Link href="/login" className="hidden sm:block text-sm font-semibold text-green-600 border border-green-600 px-4 py-2 rounded-full hover:bg-green-50 transition-colors bg-white">
+              <Link href="/login" className="hidden sm:block text-sm font-semibold text-blue-600 border border-blue-600 px-4 py-2 rounded-full hover:bg-blue-50 transition-colors bg-white">
                 Sign In
               </Link>
             )}
             <button 
               onClick={openCart}
-              className="relative p-2 text-gray-600 hover:text-green-600 transition-colors cursor-pointer"
+              className="relative p-2 text-gray-600 hover:text-blue-600 transition-colors cursor-pointer"
               aria-label="Open cart"
             >
               <ShoppingBag size={24} />
               {cartItemsCount > 0 && (
-                <span className="absolute -top-1 -right-1 h-5 w-5 rounded-full bg-green-500 text-[10px] text-white flex items-center justify-center font-bold border-2 border-white">
+                <span className="absolute -top-1 -right-1 h-5 w-5 rounded-full bg-blue-500 text-[10px] text-white flex items-center justify-center font-bold border-2 border-white">
                   {cartItemsCount}
                 </span>
               )}
@@ -105,7 +105,7 @@ export const Navbar = () => {
                 key={link.name} 
                 href={link.href}
                 onClick={() => setMobileMenuOpen(false)}
-                className={`font-medium ${pathname === link.href ? 'text-green-600' : 'text-gray-800'}`}
+                className={`font-medium ${pathname === link.href ? 'text-blue-600' : 'text-gray-800'}`}
               >
                 {link.name}
               </Link>

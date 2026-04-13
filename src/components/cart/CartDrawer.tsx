@@ -62,7 +62,7 @@ export const CartDrawer = () => {
         key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID || 'rzp_test_dummykey123',
         amount: orderData.order.amount,
         currency: orderData.order.currency,
-        name: "Kashish Life Science",
+        name: "Kashish Life Science®",
         description: "Veterinary Products Checkout",
         order_id: orderData.order.id,
         handler: async function (response: any) {
@@ -124,7 +124,7 @@ export const CartDrawer = () => {
       >
         <div className="flex items-center justify-between p-4 border-b border-gray-100">
           <div className="flex items-center gap-2 text-xl font-bold text-gray-800">
-            <ShoppingBag className="text-green-600" />
+            <ShoppingBag className="text-blue-600" />
             Your Cart
           </div>
           <button onClick={closeCart} className="p-2 text-gray-500 hover:text-gray-700 bg-gray-50 rounded-full transition-colors cursor-pointer">
@@ -178,7 +178,7 @@ export const CartDrawer = () => {
           <div className="border-t border-gray-100 p-4 bg-gray-50 mt-auto">
             <div className="flex justify-between items-center mb-4 text-lg font-bold">
               <span className="text-gray-600">Total</span>
-              <span className="text-green-700">₹{totalAmount}</span>
+              <span className="text-blue-700">₹{totalAmount}</span>
             </div>
             {user ? (
               <Button 

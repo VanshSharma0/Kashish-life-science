@@ -9,7 +9,7 @@ const products = [
     type: "Liquid",
     quantity: "300 gm",
     dosage: "Give one bottle at the first sign of calving & give another bottle after 6 to 12 hours as needed",
-    composition: "Each 100 ml Provides:\nCalcium – 10000 mg\nPhosphorus – 5000 mg\nVitamin D3 – 2000 IU\nVitamin B12 – 400 mcg\nPleurotus Minifloc. Ext. – 2000 mg\nClematis Mandshurica – 2 gm\nTrichosanthes Kirilowii – 2 gm\nPaeonia Vulgaris – 5 gm\nCibotium Barometz – 12 gm\nSilymarin – 300 mg\nMagnesium – 1500 mg\nCalcium Propionate – 2500 mg\nChromium – 300 mg\nAppropriate averages of vitamins are added.",
+    composition: "Advanced multivitamin and herbal extract gel for udder care and calcium support.",
     benefits: [
       "For Preventive & Treatment of Hypo-Calcemia & Milk Fever",
       "To Avoid Sudden milk drop due to Calcium deficiency",
@@ -26,7 +26,7 @@ const products = [
     type: "Liquid",
     quantity: "1000 ml & 250 ml",
     dosage: "Large Animals : 200 ml daily for 5 days\nSmall Animals : 100 ml daily for 5 days",
-    composition: "Each 1000 ml contains:\nGluconeogenic Precursors with Electrolytes Vitamin B Complex",
+    composition: "Gluconeogenic precursors with electrolytes and B-complex for rapid energy recovery.",
     benefits: [
       "Helps to provide instant & sustained energy to animals",
       "To Prevent the Ketosis",
@@ -45,7 +45,7 @@ const products = [
     type: "Liquid",
     quantity: "250 ml, 500 ml & 1 liter",
     dosage: "Large Animals : 10 to 20 ml daily\nSmall Animals : 2 to 5 ml daily\nPoultry : 5 ml per 100 birds",
-    composition: "Each 1 ml Contains:\nVitamin A – 5000 IU\nVitamin D3 – 1000 IU\nVitamin E – 50 mg\nVitamin B1 – 1000 mcg\nVitamin B6 – 20 mg\nVitamin C – 25 mg\nZinc – 20 mg\nCobalt – 100 mcg\nCopper – 500 mcg\nSelenium – 6 mcg\nPurified Amino Acid – 80 mg\nBase – q.s.",
+    composition: "Fortified amino acids, trace elements, and balanced vitamins for production and udder health.",
     benefits: [
       "For Udder Development",
       "For Optimize the milk production",
@@ -62,7 +62,7 @@ const products = [
     type: "Powder",
     quantity: "60 gm × 4 (Pouch)",
     dosage: "Large Animals : 1 pouch daily for 4 continuous days. Repeat if required.",
-    composition: "Each 60 gm Contains:\nBiotin – 200 mcg\nLactobacillus – 200 million CFU\nPotassium Citrate – 25 gm\nPotassium Iodide – 400 mcg\nVitamin A – 10000 IU\nVitamin D3 – 2000 IU\nVitamin E – 100 mg\nVitamin C – 100 mg\nVitamin K – 120 mg\nL-Lysine – 2000 mg\nCopper – 800 mg\nZinc Sulphate – 825 mg\nManganese Sulphate – 2000 mg\nSelenium – 4 mg\nCobalt – 40 mg\nSaccharomyces – 120 gm\nBromelain – 320 mg\nMethionine – 1500 mg\nLive Yeast – 5000 million CFU\nBeta-Carotene – 200 mg",
+    composition: "Probiotic yeast and multi-mineral matrix formulated for mastitis recovery and udder balance.",
     benefits: [
       "Helps to prevent Frequent Mastitis",
       "Helps in Faster Recovery from Mastitis",
@@ -79,7 +79,7 @@ const products = [
     type: "Powder",
     quantity: "Bolus",
     dosage: "1 bolus for 400 Kg body weight",
-    composition: "Each bolus Contains:\nOxyclozanide – 4 g\nLevamisole Hydrochloride – 2 g\nSilymarin – 400 mg",
+    composition: "Broad-spectrum anthelmintic actives with liver-supporting botanical extract.",
     benefits: [
       "Kills all type of Worms (Liver Fluke, Round worms & Tape Worms)",
       "Effective on all stages of Worms",
@@ -96,7 +96,7 @@ const products = [
     type: "Liquid",
     quantity: "20 ml & 100 ml Pack / Bolus: 1×10 Strips",
     dosage: "1–2 ml per 50 kg BW by slow I.V. or I.M. route once daily for 3–5 days\nHorses: 1 ml / 45 kg BW slow I.V. route once daily for 3–5 days",
-    composition: "Each ml contains:\nFlunixin Meglumine I.P. – 50 mg\nMeloxicam I.P. – 5 mg\nBenzyl Alcohol – 2% v/v (Preservative)\nWater for Injection I.P. – q.s.",
+    composition: "Dual NSAID injection for fast relief in pain, fever, and acute inflammation.",
     benefits: [
       "Arthritis, Bursitis, Laminitis, Myositis, Lameness",
       "Mastitis, Endotoxaemia",
@@ -113,7 +113,7 @@ const products = [
     type: "Liquid",
     quantity: "225 ml",
     dosage: "1 Bottle after A.I. to improve conception rate",
-    composition: "Each 225 ml contains herbal extract of:\nAbruma Augusta, Cyperus Rotundus, Bacopa Monnieri, Rubia Cordifolia, Tribulus Terrestris, Withania Somnifera, Glycyrrhiza Glabra\nWith Added Vitamins & Minerals:\nVitamin A – 500000 IU, Vitamin E – 500 mg, Copper – 2000 mg, Cobalt – 50 mg, Zinc – 1000 mg, Iodine – 200 mg, Manganese – 2000 mg, Omega-3 & Omega-6 Fatty Acids",
+    composition: "Herbal reproductive tonic with omega fatty acids and trace mineral support after A.I.",
     benefits: [
       "Helps to produce healthy ova",
       "Improves the count of ova",
@@ -149,7 +149,7 @@ const products = [
     type: "Liquid",
     quantity: "100 ml & 1 L",
     dosage: "Large Animal: 100 ml daily for 10 days\nSmall Animal: 50 ml daily for 10 days",
-    composition: "Each 50 ml Contains:\nCholine Chloride – 75 mg\nSorbitol – 10 mg\nFolic Acid – 45 mcg\nPotassium Citrate – 3 mg\nSilymarin – 100 mg\nLiver Extract – 500 mg\nFerric Ammonium Citrate – 20 mg\nRiboflavin – 10 mg\nCalcium Lactate – 500 mg\nNicotinamide – 1000 mg\nVitamin B12 – 20 mcg\nVitamin B2 – 20 mg",
+    composition: "Liver extract and lipotropic nutrients to support detoxification and appetite.",
     benefits: [
       "Rejuvenate & regenerate damaged liver cells",
       "Improves Appetite",
@@ -167,7 +167,7 @@ const products = [
     type: "Liquid",
     quantity: "100 ml Spray Can",
     dosage: "Spray directly on affected deep seated, septic, or FMD lesion wounds.",
-    composition: "Features & Benefits:\nDevdaru (Cedrus Deodara) - Anti-microbial\nNeem (Azadirachta indica) - Worms/Bacteria combat\nTurpentine Oil (Pinus roxburghii) - Fly Repellent & Maggotsidal\nCurcumin (Curcuma longa) - Controls inflammation",
+    composition: "Phyto-actives for wound care, fly repellency, and inflammation control in field use.",
     benefits: [
       "All types of wound like Septic, Aseptic, Deep penetrated & Wide spread",
       "Maggotted wounds",
@@ -184,7 +184,7 @@ const products = [
     type: "Powder",
     quantity: "50g × 5 Sachet",
     dosage: "Large animals: 50 gm once daily\nSmall Animals: 10 to 15 gm once daily",
-    composition: "Each 50 gm contains:\nMulti Minerals Complex fortified with standardized Phyto Extracts",
+    composition: "Mineral and standardized phyto extract blend for reproductive stability and abortion risk reduction.",
     benefits: [
       "Helps to decrease the cases of abortion",
       "Protects from threatened abortion",
@@ -220,7 +220,7 @@ const products = [
     type: "Liquid",
     quantity: "3 Days Supplementation",
     dosage: "Topical application or oral syringe gel delivery.",
-    composition: "Calcium – 7200 mg\nPhosphorus – 3600 mg\nVitamin D3 – 10000 IU\nVitamin B12 – 400 mcg\nBiotin – 200 mg\nCalcium Propionate – 2500 mg\nCobalt – 100 mcg\nManganese – 10 mg\nZinc – 250 mg\nLysine – 100 mg\nMagnesium – 300 mg\nPure herbs extracts",
+    composition: "High-energy calcium propionate gel with cofactors and herbals for milk fever support.",
     benefits: [
       "For Prevention & Treatment of Hypo-Calcemia & Milk Fever",
       "To Avoid Sudden milk drop due to Calcium deficiency",
@@ -237,7 +237,7 @@ const products = [
     type: "Liquid",
     quantity: "Bulk Options Available",
     dosage: "Standard daily oral supplementation.",
-    composition: "Calcium – 7000 mg\nPhosphorus – 3500 mg\nVitamin A – 80000 IU\nVitamin D3 – 35000 IU\nVitamin B12 – 100 mcg\nMagnesium – 500 mg\nLysine – 100 mg\nPotassium Iodide – 500 mg\nBiotin – 20 mg\nChromium – 200 mg\nSorbitol – 300 mg\nJivanti – 10 mg",
+    composition: "Ionic oral calcium with vitamins, trace elements, and Jivanti for sustained lactation performance.",
     benefits: [
       "Helps in attaining timely peak lactation",
       "Helps in maintenance of peak lactation for longer period",

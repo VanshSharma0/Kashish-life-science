@@ -32,7 +32,7 @@ export default function ProfileOrdersPage() {
 
   return (
     <div>
-      <Link href="/profile" className="inline-flex items-center text-sm font-medium text-gray-500 hover:text-green-600 mb-6 transition-colors">
+      <Link href="/profile" className="inline-flex items-center text-sm font-medium text-gray-500 hover:text-blue-600 mb-6 transition-colors">
         <ArrowLeft size={16} className="mr-2" /> Back to Account
       </Link>
       <h2 className="text-2xl font-bold text-gray-900 mb-6">Order History</h2>
@@ -62,7 +62,7 @@ export default function ProfileOrdersPage() {
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 font-medium">₹{order.totalAmount}</td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
-                      order.status === 'paid' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'
+                      order.status === 'paid' ? 'bg-blue-100 text-blue-800' : 'bg-yellow-100 text-yellow-800'
                     }`}>
                       {order.status}
                     </span>

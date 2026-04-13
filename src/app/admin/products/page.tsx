@@ -159,20 +159,20 @@ export default function AdminProducts() {
             <form onSubmit={handleSubmit} className="space-y-3">
               <div>
                 <label className="block text-xs font-medium text-gray-700">Name</label>
-                <input required value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} className="mt-1 w-full border border-gray-300 rounded-md p-1.5 outline-none focus:border-green-500 text-sm" />
+                <input required value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} className="mt-1 w-full border border-gray-300 rounded-md p-1.5 outline-none focus:border-blue-500 text-sm" />
               </div>
               <div>
                 <label className="block text-xs font-medium text-gray-700">Description</label>
-                <textarea required value={formData.description} onChange={e => setFormData({...formData, description: e.target.value})} className="mt-1 w-full border border-gray-300 rounded-md p-1.5 outline-none focus:border-green-500 text-sm" rows={2} />
+                <textarea required value={formData.description} onChange={e => setFormData({...formData, description: e.target.value})} className="mt-1 w-full border border-gray-300 rounded-md p-1.5 outline-none focus:border-blue-500 text-sm" rows={2} />
               </div>
               <div className="grid grid-cols-2 gap-3">
                 <div>
                   <label className="block text-xs font-medium text-gray-700">Price (₹)</label>
-                  <input type="number" required value={formData.price} onChange={e => setFormData({...formData, price: Number(e.target.value)})} className="mt-1 w-full border border-gray-300 rounded-md p-1.5 outline-none focus:border-green-500 text-sm" />
+                  <input type="number" required value={formData.price} onChange={e => setFormData({...formData, price: Number(e.target.value)})} className="mt-1 w-full border border-gray-300 rounded-md p-1.5 outline-none focus:border-blue-500 text-sm" />
                 </div>
                 <div>
                   <label className="block text-xs font-medium text-gray-700">Type</label>
-                  <select value={formData.type} onChange={e => setFormData({...formData, type: e.target.value as 'Powder'|'Liquid'})} className="mt-1 w-full border border-gray-300 rounded-md p-1.5 outline-none focus:border-green-500 text-sm">
+                  <select value={formData.type} onChange={e => setFormData({...formData, type: e.target.value as 'Powder'|'Liquid'})} className="mt-1 w-full border border-gray-300 rounded-md p-1.5 outline-none focus:border-blue-500 text-sm">
                     <option>Powder</option>
                     <option>Liquid</option>
                   </select>
@@ -181,25 +181,25 @@ export default function AdminProducts() {
               <div className="grid grid-cols-2 gap-3">
                 <div>
                   <label className="block text-xs font-medium text-gray-700">Quantity / Presentation</label>
-                  <input value={formData.quantity} onChange={e => setFormData({...formData, quantity: e.target.value})} className="mt-1 w-full border border-gray-300 rounded-md p-1.5 outline-none focus:border-green-500 text-sm" placeholder="e.g. 1 Ltr" />
+                  <input value={formData.quantity} onChange={e => setFormData({...formData, quantity: e.target.value})} className="mt-1 w-full border border-gray-300 rounded-md p-1.5 outline-none focus:border-blue-500 text-sm" placeholder="e.g. 1 Ltr" />
                 </div>
                 <div>
                   <label className="block text-xs font-medium text-gray-700">Dosage</label>
-                  <input value={formData.dosage} onChange={e => setFormData({...formData, dosage: e.target.value})} className="mt-1 w-full border border-gray-300 rounded-md p-1.5 outline-none focus:border-green-500 text-sm" placeholder="e.g. 100 ml daily" />
+                  <input value={formData.dosage} onChange={e => setFormData({...formData, dosage: e.target.value})} className="mt-1 w-full border border-gray-300 rounded-md p-1.5 outline-none focus:border-blue-500 text-sm" placeholder="e.g. 100 ml daily" />
                 </div>
               </div>
               <div>
-                <label className="block text-xs font-medium text-gray-700">Composition</label>
-                <textarea value={formData.composition} onChange={e => setFormData({...formData, composition: e.target.value})} className="mt-1 w-full border border-gray-300 rounded-md p-1.5 outline-none focus:border-green-500 text-sm" rows={2} placeholder="List ingredients..." />
+                <label className="block text-xs font-medium text-gray-700">Composition (storefront)</label>
+                <textarea value={formData.composition} onChange={e => setFormData({...formData, composition: e.target.value})} className="mt-1 w-full border border-gray-300 rounded-md p-1.5 outline-none focus:border-blue-500 text-sm" rows={2} placeholder="One short customer-facing line (e.g. key actives in plain language). Avoid full mg/IU breakdowns." />
               </div>
               <div>
                 <label className="block text-xs font-medium text-gray-700">Uses / Indications / Benefits (One per line)</label>
-                <textarea value={formData.benefits} onChange={e => setFormData({...formData, benefits: e.target.value})} className="mt-1 w-full border border-gray-300 rounded-md p-1.5 outline-none focus:border-green-500 text-sm" rows={2} placeholder="Helps prevent mastitis&#10;Improves feed digestion" />
+                <textarea value={formData.benefits} onChange={e => setFormData({...formData, benefits: e.target.value})} className="mt-1 w-full border border-gray-300 rounded-md p-1.5 outline-none focus:border-blue-500 text-sm" rows={2} placeholder="Helps prevent mastitis&#10;Improves feed digestion" />
               </div>
               <div>
                 <label className="block text-xs font-medium text-gray-700 mb-1">Image Asset</label>
                 <div className="flex gap-2 items-center">
-                  <input required value={formData.imageUrl} onChange={e => setFormData({...formData, imageUrl: e.target.value})} className="flex-1 border border-gray-300 rounded-md p-1.5 outline-none focus:border-green-500 text-sm" placeholder="URL or tap upload ->" />
+                  <input required value={formData.imageUrl} onChange={e => setFormData({...formData, imageUrl: e.target.value})} className="flex-1 border border-gray-300 rounded-md p-1.5 outline-none focus:border-blue-500 text-sm" placeholder="URL or tap upload ->" />
                   
                   <div className="relative flex shrink-0 items-center justify-center bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded-md p-2 cursor-pointer transition-colors w-10 overflow-hidden">
                     <input type="file" onChange={handleImageUpload} accept="image/*" className="absolute inset-0 opacity-0 cursor-pointer w-full h-full" disabled={uploading} />
@@ -210,7 +210,7 @@ export default function AdminProducts() {
                     )}
                   </div>
                 </div>
-                {uploading && <p className="text-xs text-green-600 mt-1">Uploading to secure Firebase storage...</p>}
+                {uploading && <p className="text-xs text-blue-600 mt-1">Uploading to secure Firebase storage...</p>}
               </div>
 
               <div className="flex justify-end gap-3 mt-4 pt-3 border-t border-gray-100">

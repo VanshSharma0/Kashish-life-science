@@ -43,11 +43,11 @@ export default function SignupPage() {
         <form onSubmit={handleSignup} className="space-y-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
-            <input required type="email" value={email} onChange={(e) => setEmail(e.target.value)} className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-green-500 focus:border-green-500 outline-none" />
+            <input required type="email" value={email} onChange={(e) => setEmail(e.target.value)} className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 outline-none" />
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Password</label>
-            <input required type="password" value={password} onChange={(e) => setPassword(e.target.value)} className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-green-500 focus:border-green-500 outline-none" placeholder="At least 6 characters" />
+            <input required type="password" value={password} onChange={(e) => setPassword(e.target.value)} className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 outline-none" placeholder="At least 6 characters" />
           </div>
           {error && <p className="text-red-500 text-xs">{error}</p>}
           <Button type="submit" disabled={loading} className="w-full mt-2">
@@ -73,7 +73,7 @@ export default function SignupPage() {
 
         <p className="text-center mt-8 text-sm text-gray-600">
           Already have an account?{" "}
-          <Link href="/login" className="text-green-600 hover:underline font-semibold">Sign In</Link>
+          <Link href="/login" className="text-blue-600 hover:underline font-semibold">Sign In</Link>
         </p>
       </div>
     </div>

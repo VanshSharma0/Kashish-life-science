@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
+import { isLikelyMongoConnectionFailure } from '@/lib/mongo-url';
 
 export async function GET() {
   try {
@@ -7,8 +8,13 @@ export async function GET() {
       orderBy: { createdAt: 'desc' }
     });
     return NextResponse.json(products);
-  } catch (error: any) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+  } catch (error: unknown) {
+    if (isLikelyMongoConnectionFailure(error)) {
+      console.warn('[api/products] Database unreachable — returning empty list:', error);
+      return NextResponse.json([]);
+    }
+    const message = error instanceof Error ? error.message : 'Unknown error';
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }
 

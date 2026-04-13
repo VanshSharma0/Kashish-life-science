@@ -19,11 +19,11 @@ export default function AdminOverview() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col items-center justify-center">
           <span className="text-gray-500 font-medium mb-2">Total Products</span>
-          <span className="text-4xl font-extrabold text-green-600">{metrics.products}</span>
+          <span className="text-4xl font-extrabold text-blue-600">{metrics.products}</span>
         </div>
         <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col items-center justify-center">
           <span className="text-gray-500 font-medium mb-2">Total Orders</span>
-          <span className="text-4xl font-extrabold text-green-600">{metrics.orders}</span>
+          <span className="text-4xl font-extrabold text-blue-600">{metrics.orders}</span>
         </div>
       </div>
     </div>

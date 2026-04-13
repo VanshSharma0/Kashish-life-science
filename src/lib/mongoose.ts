@@ -1,6 +1,9 @@
 import mongoose from 'mongoose';
+import { augmentMongoUri } from '@/lib/mongo-url';
 
-const MONGODB_URI = process.env.MONGODB_URL || process.env.MONGODB_URI || 'mongodb://localhost:27017/kashishlife';
+const baseUri =
+  process.env.MONGODB_URL || process.env.DATABASE_URL || process.env.MONGODB_URI || 'mongodb://localhost:27017/kashishlife';
+const MONGODB_URI = augmentMongoUri(baseUri);
 
 let cached = (global as any).mongoose;
 

@@ -1,5 +1,43 @@
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
+import { isLikelyMongoConnectionFailure } from '@/lib/mongo-url';
+import { resolveProductVariants } from '@/lib/productCatalog';
+
+export async function GET(
+  _req: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  try {
+    const { id } = await params;
+    const product = await prisma.product.findUnique({ where: { id } });
+    if (!product) {
+      return NextResponse.json({ error: 'Not found' }, { status: 404 });
+    }
+    const allProducts = await prisma.product.findMany({
+      orderBy: [{ variantSort: 'asc' }, { price: 'asc' }],
+    });
+    let variants;
+    try {
+      variants = resolveProductVariants(product, allProducts);
+    } catch (resolveErr) {
+      console.error('[api/products/[id]] resolveProductVariants:', resolveErr);
+      variants = [product];
+    }
+    if (!variants.length) {
+      variants = [product];
+    }
+    return NextResponse.json({ product, variants });
+  } catch (error: unknown) {
+    if (isLikelyMongoConnectionFailure(error)) {
+      return NextResponse.json(
+        { error: 'Database unreachable' },
+        { status: 503 }
+      );
+    }
+    const message = error instanceof Error ? error.message : 'Unknown error';
+    return NextResponse.json({ error: message }, { status: 500 });
+  }
+}
 
 export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {

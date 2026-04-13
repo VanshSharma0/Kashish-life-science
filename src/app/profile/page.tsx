@@ -21,7 +21,7 @@ export default function ProfilePage() {
     <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 max-w-2xl">
       <div className="flex flex-col gap-6">
         <div className="flex items-center gap-4">
-          <div className="bg-green-100 text-green-700 w-16 h-16 rounded-full flex items-center justify-center font-bold text-2xl">
+          <div className="bg-blue-100 text-blue-700 w-16 h-16 rounded-full flex items-center justify-center font-bold text-2xl">
             {user.email?.charAt(0).toUpperCase()}
           </div>
           <div>

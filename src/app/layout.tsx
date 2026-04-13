@@ -9,8 +9,8 @@ import { AuthProvider } from '@/context/AuthContext';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'Kashish Life Science | Complete Veterinary Solutions',
-  description: 'Built under Make in India process to provide one step solution for Indian Veterinary industry dealing in cattle feed supplements and therapeutic medicines.',
+  title: 'Kashish Life Science® | Complete Veterinary Solutions',
+  description: 'Kashish Life Science® — built under Make in India to provide one step solutions for the Indian veterinary industry: cattle feed supplements and therapeutic medicines.',
 };
 
 export default function RootLayout({
