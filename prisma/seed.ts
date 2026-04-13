@@ -22,9 +22,9 @@ type SeedRow = {
  * Run: `npx prisma db seed`
  */
 const seedData: SeedRow[] = [
-  // —— CALSOL Multivitamin Gel (CALSOL GEL) ——
+  // —— CALSOL Gel (CALSOL GEL) ——
   {
-    name: "CALSOL Multivitamin Gel",
+    name: "CALSOL Gel",
     description:
       "Oral ionic calcium with the power of multivitamins. Supports calcium balance, productivity, and recovery around high demand periods.",
     price: 150,

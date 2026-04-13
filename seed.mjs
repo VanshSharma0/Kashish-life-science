@@ -96,7 +96,7 @@ const products = [
     benefits: ["Improve fertility", "Enhance milk production", "Prevent metabolic disorders"],
   },
   {
-    name: "CALSOL Multivitamin",
+    name: "CALSOL Gel",
     description: "Oral ionic calcium + multivitamins formulated for optimal dairy wellness.",
     price: 450,
     imageUrl: "/Products/calsol multivitamin.jpeg",

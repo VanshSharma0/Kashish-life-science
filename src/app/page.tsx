@@ -12,12 +12,18 @@ export const dynamic = "force-dynamic";
 
 export default async function Home() {
   let featuredGroups = groupProductsForCatalog([]);
+  let spotlightIds = { calsol: "", kbMast: "", livsol: "" };
   try {
     const allProducts = await prisma.product.findMany({
       orderBy: { createdAt: "asc" },
     });
     const groups = groupProductsForCatalog(allProducts);
     featuredGroups = groups.slice(0, 4);
+
+    // Dynamic IDs for spotlights
+    spotlightIds.calsol = allProducts.find(p => p.name === "CALSOL GOLD")?.id || "";
+    spotlightIds.kbMast = allProducts.find(p => p.name === "KB-MAST Gel Advance")?.id || "";
+    spotlightIds.livsol = allProducts.find(p => p.name === "LIVSOL Liquid Electra")?.id || "";
   } catch (err) {
     console.error("[Home] Failed to fetch featured products:", err);
   }
@@ -113,11 +119,11 @@ export default async function Home() {
                 <span className="inline-block px-4 py-1.5 rounded-full bg-blue-50 text-blue-700 text-sm font-bold tracking-wide mb-6 border border-blue-200">Calcium Replenisher</span>
                 <h3 className="text-4xl font-extrabold text-gray-900 mb-6 tracking-tight">CALSOL GOLD</h3>
                 <p className="text-lg text-gray-500 font-light leading-relaxed mb-8">
-                  Chelated calcium and phosphorus for dairy cattle and buffaloes—supports blood mineral balance, lactation, and udder health after calving. Helps reduce hypocalcemia risk when used as part of your herd nutrition plan.
+                  <strong>CALSOL GOLD</strong> - Oral calcium & phosphorus support for peak lactation, udder health, and post-calving recovery in dairy animals.
                 </p>
-                <Link href="/products">
+                <Link href={`/products/${spotlightIds.calsol || "69dca980f5005d2e43f8cb8c"}`}>
                   <Button variant="outline" className="text-blue-700 border-blue-200 hover:bg-blue-50 hover:border-blue-300">
-                    View Catalog Details &rarr;
+                    View Product &rarr;
                   </Button>
                 </Link>
               </div>
@@ -133,11 +139,11 @@ export default async function Home() {
                 <span className="inline-block px-4 py-1.5 rounded-full bg-blue-50 text-blue-700 text-sm font-bold tracking-wide mb-6 border border-blue-200">Premium Therapy</span>
                 <h3 className="text-4xl font-extrabold text-gray-900 mb-6 tracking-tight">{formatProductDisplayName("KB-MAST Gel Advance")}</h3>
                 <p className="text-lg text-gray-500 font-light leading-relaxed mb-8">
-                  Topical udder-care gel for mastitis prevention and recovery support—soothes tissue, supports a healthy teat environment, and complements strict milking hygiene and veterinary protocols.
+                  <strong>{formatProductDisplayName("KB-MAST Gel Advance")}</strong> - Topical udder gel for mastitis prevention and teat/udder care alongside milking hygiene and veterinary protocols.
                 </p>
-                <Link href="/products">
+                <Link href={`/products/${spotlightIds.kbMast || "69dca980f5005d2e43f8cb8e"}`}>
                   <Button variant="outline" className="text-blue-700 border-blue-200 hover:bg-blue-50 hover:border-blue-300">
-                    View Catalog Details &rarr;
+                    View Product &rarr;
                   </Button>
                 </Link>
               </div>
@@ -153,11 +159,11 @@ export default async function Home() {
                 <span className="inline-block px-4 py-1.5 rounded-full bg-orange-50 text-orange-700 text-sm font-bold tracking-wide mb-6 border border-orange-200">Metabolic Booster</span>
                 <h3 className="text-4xl font-extrabold text-gray-900 mb-6 tracking-tight">{formatProductDisplayName("LIVSOL Liquid Electra")}</h3>
                 <p className="text-lg text-gray-500 font-light leading-relaxed mb-8">
-                  Liver tonic to support hepatic function, appetite, and digestion—helps animals use feed efficiently and stay productive under metabolic and environmental stress.
+                  <strong>{formatProductDisplayName("LIVSOL Liquid Electra")}</strong> - Herbal liver tonic with the power of iron, vitamins & minerals. Supports liver repair, appetite, bile secretion, and productivity.
                 </p>
-                <Link href="/products">
+                <Link href={`/products/${spotlightIds.livsol || "69dca981f5005d2e43f8cb97"}`}>
                   <Button variant="outline" className="text-blue-700 border-blue-200 hover:bg-blue-50 hover:border-blue-300">
-                    View Catalog Details &rarr;
+                    View Product &rarr;
                   </Button>
                 </Link>
               </div>
