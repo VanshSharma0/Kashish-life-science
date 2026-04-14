@@ -12,7 +12,7 @@ export const dynamic = "force-dynamic";
 
 export default async function Home() {
   let featuredGroups = groupProductsForCatalog([]);
-  let spotlightIds = { calsol: "", kbMast: "", livsol: "" };
+  const spotlightIds = { calsol: "", kbMast: "", livsol: "" };
   try {
     const allProducts = await prisma.product.findMany({
       orderBy: { createdAt: "asc" },
@@ -133,13 +133,13 @@ export default async function Home() {
             <div className="grid md:grid-cols-2 gap-12 items-center">
               <div className="md:order-2 relative h-[400px] w-full rounded-3xl overflow-hidden bg-blue-950 shadow-2xl shadow-blue-900/20 border border-blue-900 flex items-center justify-center p-8 group">
                 <div className="absolute inset-0 bg-[radial-gradient(#2563eb_1px,transparent_1px)] [background-size:20px_20px] opacity-10" />
-                <Image src="/Products/KB mast gel advance 300gm.jpeg" alt="KB-MAST Gel Advance" fill className="object-contain p-8 hover:scale-110 transition-transform duration-700" />
+                <Image src="/Products/KB mast gel advance 300gm.jpeg" alt="KB-MAST Advance Gel" fill className="object-contain p-8 hover:scale-110 transition-transform duration-700" />
               </div>
               <div className="md:order-1 md:pr-10">
                 <span className="inline-block px-4 py-1.5 rounded-full bg-blue-50 text-blue-700 text-sm font-bold tracking-wide mb-6 border border-blue-200">Premium Therapy</span>
-                <h3 className="text-4xl font-extrabold text-gray-900 mb-6 tracking-tight">{formatProductDisplayName("KB-MAST Gel Advance")}</h3>
+                <h3 className="text-4xl font-extrabold text-gray-900 mb-6 tracking-tight">{formatProductDisplayName("KB-MAST Advance Gel")}</h3>
                 <p className="text-lg text-gray-500 font-light leading-relaxed mb-8">
-                  <strong>{formatProductDisplayName("KB-MAST Gel Advance")}</strong> - Topical udder gel for mastitis prevention and teat/udder care alongside milking hygiene and veterinary protocols.
+                  <strong>{formatProductDisplayName("KB-MAST Advance Gel")}</strong> - Highly milk production and milk fever.
                 </p>
                 <Link href={`/products/${spotlightIds.kbMast || "69dca980f5005d2e43f8cb8e"}`}>
                   <Button variant="outline" className="text-blue-700 border-blue-200 hover:bg-blue-50 hover:border-blue-300">
@@ -153,13 +153,13 @@ export default async function Home() {
             <div className="grid md:grid-cols-2 gap-12 items-center">
               <div className="relative h-[400px] w-full rounded-3xl overflow-hidden bg-white shadow-xl shadow-gray-200/50 border border-gray-100 flex items-center justify-center p-8 group">
                  <div className="absolute inset-0 bg-orange-50/30 opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
-                <Image src="/Products/Livsol liquid electra 100ml.jpeg" alt="LIVSOL Liquid Electra" fill className="object-contain p-8 hover:scale-110 transition-transform duration-700" />
+                <Image src="/Products/Livsol liquid electra 100ml.jpeg" alt="LIVSOL Electra Liquid" fill className="object-contain p-8 hover:scale-110 transition-transform duration-700" />
               </div>
               <div className="md:pl-10">
                 <span className="inline-block px-4 py-1.5 rounded-full bg-orange-50 text-orange-700 text-sm font-bold tracking-wide mb-6 border border-orange-200">Metabolic Booster</span>
-                <h3 className="text-4xl font-extrabold text-gray-900 mb-6 tracking-tight">{formatProductDisplayName("LIVSOL Liquid Electra")}</h3>
+                <h3 className="text-4xl font-extrabold text-gray-900 mb-6 tracking-tight">{formatProductDisplayName("LIVSOL Electra Liquid")}</h3>
                 <p className="text-lg text-gray-500 font-light leading-relaxed mb-8">
-                  <strong>{formatProductDisplayName("LIVSOL Liquid Electra")}</strong> - Herbal liver tonic with the power of iron, vitamins & minerals. Supports liver repair, appetite, bile secretion, and productivity.
+                  <strong>{formatProductDisplayName("LIVSOL Electra Liquid")}</strong> - Herbal liver tonic with the power of iron, vitamins & minerals. Supports liver repair, appetite, bile secretion, and productivity.
                 </p>
                 <Link href={`/products/${spotlightIds.livsol || "69dca981f5005d2e43f8cb97"}`}>
                   <Button variant="outline" className="text-blue-700 border-blue-200 hover:bg-blue-50 hover:border-blue-300">
