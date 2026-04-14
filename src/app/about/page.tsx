@@ -142,32 +142,46 @@ export default function AboutPage() {
         <div className="text-center mb-12">
           <h2 className="text-3xl font-bold text-gray-900 tracking-tight mb-3">Our teams</h2>
           <p className="text-base text-gray-500 max-w-xl mx-auto leading-relaxed">
-            Administration and marketing professionals united behind Kashish Life Science® -
+            The Administration Team and Marketing Team of Kashish Life Science® are
+            united behind one mission -
             supporting veterinarians and farmers across India.
           </p>
         </div>
 
         <div className="grid lg:grid-cols-2 gap-6">
           {[
-            { src: '/team-administration.png', label: 'Administration team' },
-            { src: '/team-marketing.png', label: 'Marketing team' },
-          ].map(({ src, label }) => (
+            {
+              src: '/team-administration.png',
+              label: 'Administration Team',
+              tag: 'Leadership & Operations',
+            },
+            {
+              src: '/team-marketing.png',
+              label: 'Marketing Team',
+              tag: 'Outreach & Growth',
+            },
+          ].map(({ src, label, tag }) => (
             <figure
               key={label}
-              className="overflow-hidden rounded-2xl border border-gray-200 bg-white"
+              className="group overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:border-blue-200"
             >
-              <div className="relative aspect-video w-full bg-gray-50">
+              <div className="relative aspect-video w-full bg-linear-to-br from-gray-50 to-blue-50/50">
                 <Image
                   src={src}
                   alt={`Kashish Life Science® ${label.toLowerCase()}`}
                   fill
-                  className="object-contain"
+                  className="object-contain transition-transform duration-500 group-hover:scale-[1.03]"
                   sizes="(max-width: 1024px) 100vw, 50vw"
                   unoptimized
                 />
+                <div className="pointer-events-none absolute inset-x-0 bottom-0 h-20 bg-linear-to-t from-black/25 to-transparent" />
               </div>
-              <figcaption className="border-t border-gray-100 px-4 py-3 text-center text-sm font-medium text-gray-700">
-                {label}
+              <figcaption className="border-t border-gray-100 px-5 py-4 text-center">
+                <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-blue-600 mb-1">
+              
+                </p>
+                <p className="text-base font-semibold text-gray-900">{label}</p>
+                <p className="text-xs text-gray-500 mt-1">{tag}</p>
               </figcaption>
             </figure>
           ))}

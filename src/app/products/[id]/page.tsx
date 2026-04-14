@@ -15,6 +15,7 @@ import {
 import {
   formatTypeLabel,
   formatVariantQuantities,
+  normalizeQuantityLabel,
 } from "@/lib/productCatalog";
 
 type ProductPayload = {
@@ -202,7 +203,7 @@ export default function ProductDetails(props: {
           </h1>
           {multi && selected.quantity?.trim() ? (
             <p className="text-sm font-medium text-gray-600 mb-4">
-              Pack: {selected.quantity.trim()}
+              Pack: {normalizeQuantityLabel(selected.quantity)}
             </p>
           ) : null}
 
@@ -226,7 +227,7 @@ export default function ProductDetails(props: {
                       }`}
                     >
                       <span className="block">
-                        {v.quantity || "Standard"}
+                        {normalizeQuantityLabel(v.quantity) || "Standard"}
                       </span>
                       <span className="text-xs text-gray-600">₹{v.price}</span>
                     </button>

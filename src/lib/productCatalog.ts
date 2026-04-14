@@ -71,11 +71,18 @@ function buildGroup(variants: ProductType[]): CatalogGroup {
   const v = sortVariants(variants);
   const first = v[0];
   const prices = v.map((x) => x.price);
+  const bestVariantTitle = deriveBestVariantTitle(v);
+  const strippedName = bestVariantTitle || first.name || "Product";
   let catalogTitle = first.catalogTitle?.trim();
-  if (!catalogTitle && v.length > 1) {
-    catalogTitle = stripPackSuffixFromName(first.name);
+
+  if (catalogTitle && shouldPreferNameOverCatalogTitle(strippedName, catalogTitle)) {
+    catalogTitle = strippedName;
   }
-  if (!catalogTitle) catalogTitle = first.name ?? "Product";
+
+  if (!catalogTitle && v.length > 1) {
+    catalogTitle = strippedName;
+  }
+  if (!catalogTitle) catalogTitle = strippedName;
   return {
     canonicalId: first.id,
     catalogTitle,
@@ -88,9 +95,16 @@ function buildGroup(variants: ProductType[]): CatalogGroup {
 }
 
 function singleton(p: ProductType): CatalogGroup {
+  const strippedName = deriveBestVariantTitle([p]) || p.name || "Product";
+  const rawCatalogTitle = p.catalogTitle?.trim() || "";
+  const catalogTitle =
+    rawCatalogTitle && !shouldPreferNameOverCatalogTitle(strippedName, rawCatalogTitle)
+      ? rawCatalogTitle
+      : strippedName;
+
   return {
     canonicalId: p.id,
-    catalogTitle: p.catalogTitle?.trim() || p.name,
+    catalogTitle,
     type: p.type,
     description: p.description,
     variants: [p],
@@ -105,12 +119,16 @@ function singleton(p: ProductType): CatalogGroup {
  */
 export function stripPackSuffixFromName(name: string | null | undefined): string {
   if (name == null || typeof name !== "string") return "";
-  let s = name.trim();
+  let s = name
+    .trim()
+    .replace(/\bliq\.?\b/gi, "Liquid")
+    .replace(/\s+/g, " ");
   const steps = [
+    /\s*[-–—]?\s*\d+(?:\.\d+)?\s*(kg|g|gm|ml|ltr|litre|liter|l)\b.*$/i,
     /\s+\d+(\s*[×x]\s*\d+)+.*$/i,
     /\s+\d+\s*[×x]\s*\d+.*$/i,
     /\s+\d+\s*gm\b.*$/i,
-    /\s+[\d.]+\s*(kg|g|ml|ltr|Ltr|L)\b.*$/i,
+    /\s*[\d.]+\s*(kg|g|ml|gm|ltr|litre|liter|Ltr|L)\b.*$/i,
     /\s+\d+\s*bolus\b.*$/i,
     /\s+\([^)]+\)\s*$/i,
   ];
@@ -207,10 +225,68 @@ function formatTitleSortKey(title: string): string {
   return title.replace(/[™®]/g, "").trim().toLowerCase();
 }
 
+function shouldPreferNameOverCatalogTitle(
+  strippedName: string,
+  catalogTitle: string
+): boolean {
+  const nameTokens = tokenizeTitle(strippedName);
+  const catalogTokens = tokenizeTitle(catalogTitle);
+  if (nameTokens.length === 0 || catalogTokens.length === 0) return false;
+
+  const nameSet = new Set(nameTokens);
+  const catalogSet = new Set(catalogTokens);
+
+  let shared = 0;
+  for (const t of catalogSet) {
+    if (nameSet.has(t)) shared += 1;
+  }
+
+  const allCatalogWordsPresent = shared === catalogSet.size;
+  const hasExtraNameWords = nameSet.size > catalogSet.size;
+  return allCatalogWordsPresent && hasExtraNameWords;
+}
+
+function tokenizeTitle(value: string): string[] {
+  return value
+    .toLowerCase()
+    .replace(/[™®]/g, "")
+    .replace(/[^a-z0-9\s-]/g, " ")
+    .split(/[\s-]+/)
+    .map((x) => x.trim())
+    .filter(Boolean);
+}
+
+function deriveBestVariantTitle(variants: ProductType[]): string {
+  const candidates = variants
+    .map((v) => stripPackSuffixFromName(v.name))
+    .filter((v) => v.length > 0);
+  if (!candidates.length) return "";
+
+  const best = [...new Set(candidates)].sort((a, b) => {
+    const tokenDelta = tokenizeTitle(b).length - tokenizeTitle(a).length;
+    if (tokenDelta !== 0) return tokenDelta;
+    return b.length - a.length;
+  })[0];
+
+  return best || candidates[0];
+}
+
+export function normalizeQuantityLabel(quantity: string | null | undefined): string {
+  if (!quantity?.trim()) return "";
+
+  return quantity
+    .trim()
+    .replace(/\s+/g, " ")
+    .replace(/\b(lit\.?|ltrs?\.?|ltr\.?|litre?s?|liter?s?)\b/gi, "litre")
+    .replace(/\bmls?\b/gi, "ml")
+    .replace(/\bkgs?\b/gi, "kg")
+    .replace(/\bgms?\b/gi, "gm");
+}
+
 /** Compact quantity line for cards: "100 ml · 500 ml · 1 L" */
 export function formatVariantQuantities(variants: ProductType[]): string {
   const labels = variants
-    .map((v) => v.quantity?.trim())
+    .map((v) => normalizeQuantityLabel(v.quantity))
     .filter((q): q is string => Boolean(q));
   if (labels.length === 0) return "";
   const unique = [...new Set(labels)];

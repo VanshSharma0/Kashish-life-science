@@ -52,16 +52,17 @@ export const ProductCard = ({ group }: { group: CatalogGroup }) => {
   };
 
   return (
-    <div className="group rounded-2xl border border-gray-100 bg-white p-4 shadow-sm transition-all hover:shadow-md hover:border-blue-100 flex flex-col h-full">
+    <div className="group rounded-2xl border border-gray-100 bg-white p-4 shadow-sm transition-all duration-200 hover:shadow-md hover:border-blue-100 hover:scale-[1.02] transform-gpu flex flex-col h-full">
       <Link
         href={`/products/${group.canonicalId}`}
-        className="block relative aspect-square overflow-hidden rounded-xl bg-gray-50 mb-4"
+        className="block relative h-64 w-full rounded-xl bg-gray-50 mb-4"
       >
         <Image
           src={defaultVariant.imageUrl}
           alt={title}
           fill
-          className="object-contain p-3 transition-transform duration-300 group-hover:scale-105"
+          className="object-contain object-center p-3"
+          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
         />
       </Link>
       <div className="flex-1 flex flex-col">
