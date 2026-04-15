@@ -200,7 +200,7 @@ export default async function Home() {
             <span className="text-blue-600 font-bold uppercase tracking-wider text-sm mb-4 block">About Our Infrastructure</span>
             <h2 className="text-4xl md:text-5xl font-extrabold text-gray-900 mb-6 tracking-tight">Built Under the <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-blue-500">Make in India</span> Process</h2>
             <p className="text-xl text-gray-500 leading-relaxed font-light">
-              Established in October 2021, Kashish Life Science® emerged as a singular solution for the Indian Veterinary industry. We specialize in highly bioavailable cattle feed supplements formulated strictly for modern dairy demands.
+              Established in January 2019, Kashish Life Science® emerged as a singular solution for the Indian Veterinary industry. We specialize in highly bioavailable cattle feed supplements formulated strictly for modern dairy demands.
             </p>
           </div>
 
