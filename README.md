@@ -16,6 +16,39 @@ bun dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
+## Razorpay setup
+
+Create a `.env.local` file from `.env.example` and set:
+
+```bash
+RAZORPAY_KEY_ID=rzp_test_...
+RAZORPAY_KEY_SECRET=...
+NEXT_PUBLIC_RAZORPAY_KEY_ID=rzp_test_...
+```
+
+Notes:
+- `RAZORPAY_KEY_ID` and `RAZORPAY_KEY_SECRET` are used by server routes (`/api/razorpay`, `/api/verify`).
+- `NEXT_PUBLIC_RAZORPAY_KEY_ID` is used by the browser checkout script.
+- Use test keys in development and switch to live keys only in production.
+
+## Admin dashboard setup
+
+The `/admin` area now uses email/password auth with DB-backed admin users.
+
+Set these in `.env.local`:
+
+```bash
+ADMIN_EMAIL=admin@example.com
+ADMIN_PASSWORD=your-strong-password
+ADMIN_NAME=Primary Admin
+```
+
+This account acts as a recovery super user:
+- Logging in with `ADMIN_EMAIL` + `ADMIN_PASSWORD` auto-creates or repairs the account as `super_admin`.
+- If those env vars are not set, fallback credentials are:
+  - `admin@kashishlife.com`
+  - `admin12345`
+
 ## Auth email configuration (Firebase)
 
 Email login verification link and forgot-password emails are handled by Firebase Auth.

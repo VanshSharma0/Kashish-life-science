@@ -1,25 +1,43 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import { LayoutDashboard, Package, ShoppingCart, LogOut, Menu, X } from 'lucide-react';
+import { usePathname, useRouter } from 'next/navigation';
+import { LayoutDashboard, Package, ShoppingCart, LogOut, Menu, X, UserCog } from 'lucide-react';
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [adminName, setAdminName] = useState<string>('Admin');
   const pathname = usePathname();
+  const router = useRouter();
 
   const navItems = [
     { href: '/admin', label: 'Overview', icon: LayoutDashboard },
     { href: '/admin/products', label: 'Products', icon: Package },
     { href: '/admin/orders', label: 'Orders', icon: ShoppingCart },
+    { href: '/admin/admins', label: 'Admins', icon: UserCog },
   ];
 
   const isActive = (href: string) => pathname === href;
 
-  const handleSignOut = () => {
-    document.cookie = "admin_session=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-    window.location.href = "/admin/login";
+  useEffect(() => {
+    fetch('/api/admin/auth/me')
+      .then((res) => {
+        if (!res.ok) {
+          router.replace('/admin/login');
+          return null;
+        }
+        return res.json();
+      })
+      .then((data) => {
+        if (data?.admin?.name) setAdminName(data.admin.name);
+      })
+      .catch(() => {});
+  }, [router]);
+
+  const handleSignOut = async () => {
+    await fetch('/api/admin/auth/logout', { method: 'POST' });
+    router.replace('/admin/login');
   };
 
   return (
@@ -75,6 +93,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         </nav>
 
         <div className="mt-auto border-t border-blue-800 pt-4">
+          <p className="px-4 pb-2 text-xs text-blue-200">Signed in as: {adminName}</p>
           <button
             className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-red-500/20 text-red-400 transition-colors w-full text-left"
             onClick={handleSignOut}

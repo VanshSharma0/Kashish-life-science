@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { Button } from '@/components/ui/Button';
 
 export default function AdminLogin() {
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -12,12 +13,22 @@ export default function AdminLogin() {
     setError('');
     setIsLoading(true);
 
-    if (password === 'admin123') {
-      const secureFlag = window.location.protocol === 'https:' ? '; secure' : '';
-      document.cookie = `admin_session=authenticated; path=/; max-age=86400; samesite=lax${secureFlag}`;
+    try {
+      const res = await fetch('/api/admin/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }),
+      });
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.error || 'Login failed');
+      }
+
       window.location.assign('/admin');
-    } else {
-      setError('Invalid admin password');
+    } catch (err) {
+      const message = err instanceof Error ? err.message : 'Login failed';
+      setError(message);
       setIsLoading(false);
     }
   };
@@ -29,7 +40,22 @@ export default function AdminLogin() {
         <h1 className="text-2xl font-bold text-gray-900 mb-6 text-center">Admin Portal</h1>
         <form onSubmit={handleLogin} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Passkey</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Admin Email</label>
+            <input 
+              type="email" 
+              value={email}
+              onChange={(e) => {
+                setEmail(e.target.value);
+                if (error) setError('');
+              }}
+              className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 outline-none"
+              placeholder="admin@kashishlife.com"
+              disabled={isLoading}
+              required
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Password</label>
             <input 
               type="password" 
               value={password}
@@ -38,8 +64,9 @@ export default function AdminLogin() {
                 if (error) setError('');
               }}
               className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 outline-none"
-              placeholder="Enter password (admin123)"
+              placeholder="Enter admin password"
               disabled={isLoading}
+              required
             />
           </div>
           {error && <p className="text-red-500 text-sm">{error}</p>}

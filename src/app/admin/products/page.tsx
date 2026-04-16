@@ -17,6 +17,25 @@ type ProductFormData = {
   benefits: string;
 };
 
+function buildVariantFamilyKey(name: string) {
+  const base = stripPackSuffixFromName(name || '')
+    .toLowerCase()
+    .replace(/\+/g, ' plus ')
+    .replace(/[^a-z0-9\s-]/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+
+  if (!base) return '';
+
+  const tokens = base
+    .split(/[\s-]+/)
+    .map((t) => t.trim())
+    .filter(Boolean)
+    .filter((t) => t !== 'plus');
+
+  return [...new Set(tokens)].sort().join('-');
+}
+
 export default function AdminProducts() {
   const [products, setProducts] = useState<ProductType[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -32,11 +51,15 @@ export default function AdminProducts() {
 
   const getTemplateForName = (name: string): ProductType | null => {
     const key = stripPackSuffixFromName(name).toLowerCase();
+    const familyKey = buildVariantFamilyKey(name);
     if (!key) return null;
     const match = products.find((p) => {
       const byName = stripPackSuffixFromName(p.name).toLowerCase() === key;
       const byCatalog = (p.catalogTitle?.trim().toLowerCase() || '') === key;
-      return byName || byCatalog;
+      const byFamily =
+        buildVariantFamilyKey(p.name) === familyKey ||
+        buildVariantFamilyKey(p.catalogTitle || '') === familyKey;
+      return byName || byCatalog || byFamily;
     });
     return match ?? null;
   };
@@ -145,6 +168,12 @@ export default function AdminProducts() {
     reader.readAsDataURL(file);
   };
 
+  const groupingBaseName = stripPackSuffixFromName(formData.name || '');
+  const groupingFamilyKey = buildVariantFamilyKey(formData.name || '');
+  const groupingPreviewId = groupingBaseName
+    ? `auto-${groupingFamilyKey || groupingBaseName.replace(/[^a-z0-9]+/gi, '-').toLowerCase()}`
+    : '';
+
   return (
     <div>
       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 mb-6 sm:mb-8">
@@ -246,7 +275,7 @@ export default function AdminProducts() {
                     let nextData = { ...formData, name: nextName };
                     if (template) {
                       nextData = applyTemplate(nextData, template);
-                      setAutofillSource(template.name);
+                      setAutofillSource(stripPackSuffixFromName(template.name));
                     } else {
                       setAutofillSource(null);
                     }
@@ -255,8 +284,14 @@ export default function AdminProducts() {
                   className="mt-1 w-full border border-gray-300 rounded-md p-1.5 outline-none focus:border-blue-500 text-sm"
                 />
                 {autofillSource && !editingId && (
-                  <p className="mt-1 text-xs text-emerald-700">
-                    Auto-filled shared fields from: {autofillSource}
+                  <p className="mt-1 text-xs text-indigo-700">
+                    Will be added as a variant of: {autofillSource} (shared fields auto-filled)
+                  </p>
+                )}
+                {!editingId && groupingBaseName && (
+                  <p className="mt-1 text-xs text-blue-600">
+                    Grouping preview: <span className="font-medium">{groupingBaseName}</span>{' '}
+                    <span className="text-blue-500">({groupingPreviewId})</span>
                   </p>
                 )}
               </div>
