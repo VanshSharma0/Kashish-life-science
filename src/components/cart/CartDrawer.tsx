@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { useCartStore } from '@/store/cartStore';
-import { X, Minus, Plus, ShoppingBag } from 'lucide-react';
+import { X, Minus, Plus, ShoppingBag, CircleAlert } from 'lucide-react';
 import { Button } from '../ui/Button';
 import Image from 'next/image';
 import { useAuth } from '@/context/AuthContext';
@@ -65,6 +65,7 @@ export const CartDrawer = () => {
   const [isCheckingOut, setIsCheckingOut] = useState(false);
   const [profilePromptOpen, setProfilePromptOpen] = useState(false);
   const [missingProfileFields, setMissingProfileFields] = useState<string[]>([]);
+  const [checkoutError, setCheckoutError] = useState('');
   const { user } = useAuth();
   const router = useRouter();
 
@@ -91,6 +92,7 @@ export const CartDrawer = () => {
 
   const handleCheckout = async () => {
     if (!user) return;
+    setCheckoutError('');
 
     const profile = loadCustomerProfile(user.uid);
     const missingFields = validateCustomerProfile(profile);
@@ -149,7 +151,7 @@ export const CartDrawer = () => {
           const verifyData = (await verifyResponse.json()) as VerifyResponse;
 
           if (!verifyResponse.ok || verifyData.error) {
-            alert(verifyData.error || "Verification Failed!");
+            setCheckoutError(verifyData.error || 'Payment verification failed. If money was deducted, it will be auto-reconciled shortly.');
           } else {
             clearCart();
             closeCart();
@@ -168,12 +170,13 @@ export const CartDrawer = () => {
 
       const rzp = new window.Razorpay(options);
       rzp.on('payment.failed', function () {
-        alert("Payment sequence cancelled or failed.");
+        setCheckoutError('Payment was cancelled or could not be completed. Please try again.');
       });
       rzp.open();
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error(err);
-      alert("Checkout failed: " + err.message);
+      const message = err instanceof Error ? err.message : 'Checkout failed. Please try again.';
+      setCheckoutError(message);
     }
     setIsCheckingOut(false);
   };
@@ -284,6 +287,22 @@ export const CartDrawer = () => {
 
         {items.length > 0 && (
           <div className="border-t border-gray-100 p-4 bg-gray-50 mt-auto">
+            {checkoutError && (
+              <div className="mb-4 rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-800 flex items-start gap-2">
+                <CircleAlert size={16} className="mt-0.5 shrink-0" />
+                <div className="flex-1">
+                  <p>{checkoutError}</p>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setCheckoutError('')}
+                  className="text-red-700 hover:text-red-900 transition-colors"
+                  aria-label="Dismiss checkout error"
+                >
+                  <X size={14} />
+                </button>
+              </div>
+            )}
             <div className="flex justify-between items-center mb-4 text-lg font-bold">
               <span className="text-gray-600">Total</span>
               <span className="text-blue-700">₹{totalAmount}</span>
